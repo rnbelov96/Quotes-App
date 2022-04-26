@@ -4,61 +4,18 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
 import QuotesRender from './QuotesRender';
+import rootReducer from '@/redux/reducers/root-reducer';
+import { AppActionCreators } from '@/redux/app';
+import { getAllQuotes, getCurrentQuoteId } from '@/redux/app/selectors';
 
-let nextId = 1;
-
-const quotes = [
-    {
-        author: 'Dalai Lama',
-        quote: 'Remember that not getting what you want is sometimes a wonderful stroke of luck.',
-        id: nextId++
-    },
-    {
-        author: 'Benjamin Franklin',
-        quote: 'I didn’t fail the test. I just found 100 ways to do it wrong.',
-        id: nextId++
-    },
-    {
-        author: 'Vincent van Gogh',
-        quote: 'I would rather die of passion than of boredom.',
-        id: nextId++
-    },
-    {
-        author: 'Marie Curie',
-        quote: 'We must believe that we are gifted for something, and that this thing, at whatever cost, must be attained.',
-        id: nextId++
-    },
-];
-
-const NEXTQUOTE = 'NEXTQUOTE';
-
-const nextQuote = () => {
-    return {
-        type: NEXTQUOTE
-    }
-}
-
-const reducer = (state = 1, action) => {
-    switch (action.type) {
-        case NEXTQUOTE:
-            let newQuoteId = Math.round(1 - 0.5 + Math.random() * (quotes.length - 1 + 1));
-            while (newQuoteId === state) {
-                newQuoteId = Math.round(1 - 0.5 + Math.random() * (quotes.length - 1 + 1))
-            }
-            return newQuoteId;
-        default:
-            return state;
-    }
-}
-
-const store = createStore(reducer);
+const store = createStore(rootReducer);
 
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            quotes: quotes,
+            quotes: this.props.quotes,
         }
         this.buttonHandler = this.buttonHandler.bind(this);
     }
@@ -78,7 +35,7 @@ class App extends React.Component {
         author.style.opacity = 0;
         newQuote.disabled = true;
         setTimeout(() => {
-            this.props.changeQuoteId();
+            this.props.changeQuoteId(2);
             this.setState({
                 quotes: this.state.quotes
             })
@@ -103,14 +60,15 @@ class App extends React.Component {
 
 const mapStateToProps = (state = 1) => {
     return {
-        quoteId: state
+        quotes: getAllQuotes(state),
+        quoteId: getCurrentQuoteId(state)
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        changeQuoteId: () => {
-            dispatch(nextQuote())
+        changeQuoteId: (quoteId) => {
+            dispatch(AppActionCreators.changeQuote(quoteId))
         }
     }
 }

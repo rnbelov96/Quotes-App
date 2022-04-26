@@ -20,6 +20,7 @@
       }
     }],
     "no-use-before-define": "off",
+    "default-param-last": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
     "max-len": ["error", { "code": 125 }],
     "import/no-extraneous-dependencies": [
@@ -57,10 +58,10 @@
     "import/resolver": {
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      },
+      "webpack": {
+        "config": "./webpack.dev.js"
       }
-    },
-    "webpack": {
-      "config": "./webpack.dev.js"
     }
   },
   "overrides": [
