@@ -21,6 +21,7 @@
     }],
     "no-use-before-define": "off",
     "default-param-last": "off",
+    "react/function-component-definition": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
     "max-len": ["error", { "code": 125 }],
     "import/no-extraneous-dependencies": [
